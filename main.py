@@ -1,16 +1,19 @@
-# This is a sample Python script.
+import tkinter as tk
+import sys
+import os
 
-# Press Maiusc+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
+from UI.view import SerieAApp
+from database.DAO import DatabaseManager
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {Alessio}')  # Press Ctrl+F8 to toggle the breakpoint.
+if __name__ == "__main__":
+    # --- FASE DI RESET ---
+    print("Avvio pulizia database...")
+    db = DatabaseManager()
+    db.reset_simulation()
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    # --- AVVIO INTERFACCIA ---
+    root = tk.Tk()
+    app = SerieAApp(root)
+    root.mainloop()
