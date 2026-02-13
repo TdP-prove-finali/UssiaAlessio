@@ -89,6 +89,21 @@ class DatabaseManager:
         finally:
             conn.close()
 
+    def check_giornata_completata(self, giornata):
+        """
+        Restituisce True se tutte le partite della giornata sono state giocate.
+        Restituisce False se c'è ancora qualche partita da giocare.
+        """
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        query = "SELECT COUNT(*) FROM matches WHERE giornata = %s AND played = 0"
+        cursor.execute(query, (giornata,))
+        count_non_giocate = cursor.fetchone()[0]
+        conn.close()
+
+        # Se il conto è 0, vuol dire che sono TUTTE giocate -> True
+        return count_non_giocate == 0
+
     def get_match_details(self, match_id):
         """Recupera gli eventi di una partita per il popup, quando si clicca una partita."""
         conn = self.get_connection()
@@ -171,6 +186,26 @@ class DatabaseManager:
             ORDER BY perf.vote DESC
         """
         cursor.execute(query, (giornata,))
+        results = cursor.fetchall()
+        conn.close()
+        return results
+
+    def get_season_best_players(self, min_presenze=5):
+        """Restituisce i giocatori ordinati per Media Voto (con un minimo di presenze)."""
+        conn = self.get_connection()
+        cursor = conn.cursor(dictionary=True)
+        query = """
+            SELECT p.name, p.role, t.name as team, 
+                   AVG(perf.vote) as avg_vote, 
+                   COUNT(perf.vote) as presenze
+            FROM performances perf
+            JOIN players p ON perf.player_id = p.id
+            JOIN teams t ON p.team_id = t.id
+            GROUP BY p.id
+            HAVING presenze >= %s
+            ORDER BY avg_vote DESC, presenze DESC
+        """
+        cursor.execute(query, (min_presenze,))
         results = cursor.fetchall()
         conn.close()
         return results

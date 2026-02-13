@@ -174,12 +174,20 @@ class SerieAApp:
         btn_refresh.pack(pady=5)
 
     def _build_totw_tab(self):
-        self.lbl_totw_title = ttk.Label(self.tab_totw, text="Top XI - Giornata 1", font=("Arial", 14, "bold"))
+        self.lbl_totw_title = ttk.Label(self.tab_totw, text="Top XI", font=("Arial", 14, "bold"))
         self.lbl_totw_title.pack(pady=10)
-        self.txt_totw = tk.Text(self.tab_totw, height=20, width=60)
+
+        self.txt_totw = tk.Text(self.tab_totw, height=20, width=70)  # Un po' più larga
         self.txt_totw.pack(padx=10, pady=10)
-        btn_show_totw = ttk.Button(self.tab_totw, text="Mostra Squadra Settimana Selezionata", command=self.show_totw)
-        btn_show_totw.pack(pady=5)
+
+        btn_frame = ttk.Frame(self.tab_totw)
+        btn_frame.pack(pady=5)
+
+        btn_show_totw = ttk.Button(btn_frame, text="Mostra Squadra della Giornata", command=self.show_totw)
+        btn_show_totw.pack(side='left', padx=10)
+
+        btn_show_toty = ttk.Button(btn_frame, text="Mostra SQUADRA DELL'ANNO", command=self.show_toty)
+        btn_show_toty.pack(side='left', padx=10)
 
     def _build_stats_tab(self):
         frame_container = ttk.Frame(self.tab_stats)
@@ -233,6 +241,23 @@ class SerieAApp:
 
     def simula_giornata_corrente(self):
         g = self.current_giornata
+
+        if self.db.check_giornata_completata(g):
+            messagebox.showinfo(
+                "Simulazione Completata",
+                f"La Giornata {g} è già stata giocata.\nI risultati sono definitivi."
+            )
+            return
+
+        if g > 1:
+            giornata_precedente = g - 1
+            if not self.db.check_giornata_completata(giornata_precedente):
+                messagebox.showwarning(
+                    "Ordine Errato",
+                    f"Non puoi simulare la Giornata {g} se non hai ancora giocato la Giornata {giornata_precedente}.\n\nTorna indietro e simula in ordine!"
+                )
+                return
+
         self.sim.simulate_day(g)
         messagebox.showinfo("Simulazione", f"Giornata {g} simulata con successo!")
         self.load_matches()
@@ -349,6 +374,46 @@ class SerieAApp:
 
         for p in top_xi:
             self.txt_totw.insert('end', f"{p['vote']:<6} {p['role']:<10} {p['name']:<25} {p['team']}\n")
+
+
+    def show_toty(self):
+        players = self.db.get_season_best_players(min_presenze=5)
+
+        if not players:
+            self.txt_totw.delete('1.0', 'end')
+            self.txt_totw.insert('end',
+                                 "Non ci sono abbastanza dati per la Squadra dell'Anno (servono almeno 5 giornate).")
+            return
+
+        self.lbl_totw_title.config(text="SQUADRA DELL'ANNO (Media Voto)")
+        self.txt_totw.delete('1.0', 'end')
+
+        # Filtra per ruolo
+        keepers = [p for p in players if 'GK' in p['role']]
+        defs = [p for p in players if 'DF' in p['role']]
+        mids = [p for p in players if 'MF' in p['role']]
+        fwds = [p for p in players if 'FW' in p['role']]
+
+        # Formazione 4-3-3 (Prende i migliori per media voto)
+        best_gk = keepers[:1]
+        best_df = defs[:4]
+        best_mf = mids[:3]
+        best_fw = fwds[:3]
+
+        top_xi = best_gk + best_df + best_mf + best_fw
+
+        self.txt_totw.insert('end', f"{'MEDIA':<6} {'PRES':<6} {'RUOLO':<8} {'NOME':<25} {'SQUADRA'}\n")
+        self.txt_totw.insert('end', "=" * 70 + "\n")
+
+        if not top_xi:
+            self.txt_totw.insert('end',
+                                 "Non ci sono abbastanza giocatori per formare un 4-3-3 completo.\nSimula più giornate!")
+            return
+
+        for p in top_xi:
+            # Formattiamo la media voto per mostrare solo 2 decimali (es. 7.45)
+            media = f"{p['avg_vote']:.2f}"
+            self.txt_totw.insert('end', f"{media:<6} {p['presenze']:<6} {p['role']:<8} {p['name']:<25} {p['team']}\n")
 
 
 if __name__ == "__main__":
