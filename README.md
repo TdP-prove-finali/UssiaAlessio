@@ -3,7 +3,7 @@
 ## Istruzioni per l'installazione e l'utilizzo dell'applicazione
 
 1. Effettuare il fork del [repository](https://github.com/TdP-prove-finali/UssiaAlessio) e importare il progetto nel proprio ambiente di sviluppo (Pycharm o altri)
-2. Importare ed eseguire il file `` contenuto nella cartella `database` tramite il proprio DBMS
+2. Importare ed eseguire il file `seriea.sql` contenuto nella cartella `database` tramite il proprio DBMS
 3. Inserire l'user e la password di accesso al DBMS nella cartella `database` nel file `connector.cnf` 
 4. Eseguire la classe `Main` per avviare l'applicazione
 
