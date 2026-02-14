@@ -12,8 +12,8 @@ Video dimostrativo sull'uso dell'applicazione disponibile al link:
 ## Licenze
 
 * Il software è rilasciato con licenza Open Source [Apache 2.0](https://github.com/TdP-prove-finali/UssiaAlessio/blob/main/LICENSE)
-* La relazione tecnica è rilasciata con licenza
+* La relazione tecnica è rilasciata con licenza [Creative Commons BY-NC-SA 4.0] (https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en)
 
 ## Documentazione
 
-La documentazione del progetto è disponibile alla cartella [documenti]()
+La documentazione del progetto è disponibile alla cartella [documenti](https://github.com/TdP-prove-finali/UssiaAlessio/tree/main/documenti)
