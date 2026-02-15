@@ -20,7 +20,7 @@ class MatchSimulator:
         # Ordiniamo i giocatori per capacità realizzativa decrescente
         sorted_players = sorted(players, key=lambda p: p['weight_goal'], reverse=True)
 
-        # Prendiamo solo i primi 11 (i titolari virtuali) per evitare che rose ampie siano avvantaggiate
+        # Prendiamo solo i migliori 11
         top_11 = sorted_players[:11]
 
         strength = sum(p['weight_goal'] for p in top_11)

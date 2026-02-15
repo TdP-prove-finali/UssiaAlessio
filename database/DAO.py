@@ -30,7 +30,6 @@ class DatabaseManager:
         finally:
             conn.close()
 
-
     def get_connection(self):
         return DBConnect.get_connection()
 

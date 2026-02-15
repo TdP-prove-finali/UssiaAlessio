@@ -186,7 +186,7 @@ class SerieAApp:
         btn_show_totw = ttk.Button(btn_frame, text="Mostra Squadra della Giornata", command=self.show_totw)
         btn_show_totw.pack(side='left', padx=10)
 
-        btn_show_toty = ttk.Button(btn_frame, text="Mostra SQUADRA DELL'ANNO", command=self.show_toty)
+        btn_show_toty = ttk.Button(btn_frame, text="Mostra Squadra della Stagione", command=self.show_toty)
         btn_show_toty.pack(side='left', padx=10)
 
     def _build_stats_tab(self):
