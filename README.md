@@ -7,7 +7,7 @@
 3. Inserire l'user e la password di accesso al DBMS nella cartella `database` nel file `connector.cnf` 
 4. Eseguire la classe `Main` per avviare l'applicazione
 
-Video dimostrativo sull'uso dell'applicazione disponibile al link: 
+Video dimostrativo sull'uso dell'applicazione disponibile al link: https://youtu.be/P95FOOADEYk
 
 ## Licenze
 

@@ -37,7 +37,7 @@ class MatchSimulator:
         str_away = self._calculate_team_strength(away_players)
 
         # 2. CALCOLO ASPETTATIVA GOL (xG) BASATO SULLA FORZA
-        # Media gol serie A casalinga: ~1.5 | Trasferta: ~1.1
+        # Media gol serie A casalinga: ~1.45 | Trasferta: ~1.1
 
         # Fattore correttivo per evitare punteggi tennistici (es. 10-0)
         DAMPING_FACTOR = 0.6
